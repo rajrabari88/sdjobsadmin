@@ -55,7 +55,7 @@ try {
     $user = $user_result->fetch_assoc();
 
     // Check if already applied
-    $stmt = $conn->prepare("SELECT 1 FROM applications WHERE user_id = ? AND job_id = ?");
+    $stmt = $conn->prepare("SELECT 1 FROM job_applications WHERE user_id = ? AND job_id = ?");
     $stmt->bind_param("ss", $user_id, $job_id);
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
@@ -65,7 +65,7 @@ try {
     }
 
     // Create application
-    $stmt = $conn->prepare("INSERT INTO applications (user_id, job_id, cover_letter, resume_url, status, applied_date) 
+    $stmt = $conn->prepare("INSERT INTO job_applications (user_id, job_id, cover_letter, resume_url, status, applied_date) 
                            VALUES (?, ?, ?, ?, 'applied', NOW())");
     $stmt->bind_param("ssss", $user_id, $job_id, $cover_letter, $user['resume_url']);
     $stmt->execute();

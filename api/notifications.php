@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Handle preflight OPTIONS request
+// OPTIONS preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -29,9 +29,10 @@ if (!$user_id) {
 }
 
 try {
-    // Check if user exists
+
+    // Validate user exists
     $stmt = $conn->prepare("SELECT 1 FROM users WHERE id = ?");
-    $stmt->bind_param("s", $user_id);
+    $stmt->bind_param("i", $user_id);
     $stmt->execute();
     if ($stmt->get_result()->num_rows === 0) {
         http_response_code(404);
@@ -39,24 +40,29 @@ try {
         exit();
     }
 
-    // Get total count
+    // Count total notifications
     $stmt = $conn->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ?");
-    $stmt->bind_param("s", $user_id);
+    $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $total = $stmt->get_result()->fetch_row()[0];
 
-    // Calculate offset
+    // Pagination offset
     $offset = ($page - 1) * $per_page;
 
-    // Get notifications with pagination
-    $sql = "SELECT id, title, body, is_read, created_at 
+    // Fetch notifications
+    $sql = "SELECT 
+                id,
+                title,
+                message AS body,
+                is_read,
+                created_at
             FROM notifications 
-            WHERE user_id = ? 
-            ORDER BY created_at DESC 
+            WHERE user_id = ?
+            ORDER BY created_at DESC
             LIMIT ? OFFSET ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sii", $user_id, $per_page, $offset);
+    $stmt->bind_param("iii", $user_id, $per_page, $offset);
     $stmt->execute();
     $result = $stmt->get_result();
 

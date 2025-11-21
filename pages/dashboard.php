@@ -5,7 +5,7 @@ include __DIR__ . '/../config/db.php';
 // ==== FETCH STATS ==== //
 $total_jobs = $conn->query("SELECT COUNT(*) AS total FROM jobs")->fetch_assoc()['total'];
 $total_users = $conn->query("SELECT COUNT(*) AS total FROM users")->fetch_assoc()['total'];
-$total_applications = $conn->query("SELECT COUNT(*) AS total FROM applications")->fetch_assoc()['total'];
+$total_applications = $conn->query("SELECT COUNT(*) AS total FROM job_applications")->fetch_assoc()['total'];
 
 // ==== FETCH LATEST JOBS ==== //
 $latest_jobs = $conn->query("SELECT * FROM jobs ORDER BY created_at DESC LIMIT 5");
