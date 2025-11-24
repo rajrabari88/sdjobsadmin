@@ -9,6 +9,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+$headers = getallheaders();
+$auth = $headers['Authorization'] ?? '';
+
+if (!$auth || $auth !== 'Bearer 9313069472') {
+    http_response_code(401);
+    echo json_encode(["status" => "error", "message" => "Unauthorized: Invalid token"]);
+    exit();
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);

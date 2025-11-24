@@ -60,7 +60,7 @@ $recent_users = $conn->query("SELECT * FROM users ORDER BY created_at DESC LIMIT
 
     <div class="mb-4 d-flex justify-content-between align-items-center">
         <h4 class="fw-semibold text-dark">🧾 Latest Job Posts</h4>
-        <a href="index.php?page=jobs" class="btn btn-outline-secondary btn-sm">View All <i class="fas fa-arrow-right ms-1"></i></a>
+        <a href="index.php?page=job_post" class="btn btn-outline-secondary btn-sm">View All <i class="fas fa-arrow-right ms-1"></i></a>
     </div>
     <div class="table-responsive shadow-sm rounded-3 border">
         <table class="table table-striped table-hover align-middle mb-0">

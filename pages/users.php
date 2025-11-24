@@ -371,7 +371,4 @@ $users = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         });
     });
 </script>
-
-</body>
-
-</html>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

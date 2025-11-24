@@ -4,6 +4,23 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header('Content-Type: application/json');
 
+// 1️⃣ Handle preflight OPTIONS request first
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// 2️⃣ Now check Authorization
+$headers = getallheaders();
+$auth = $headers['Authorization'] ?? '';
+
+if (!$auth || $auth !== 'Bearer 9313069472') {
+    http_response_code(401);
+    echo json_encode(["status" => "error", "message" => "Unauthorized: Invalid token"]);
+    exit();
+}
+
+// 3️⃣ Include DB and handle GET request
 include "../config/db.php";
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
